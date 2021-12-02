@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import './GameSquare.css'
 
-const GameSquare = ({ id, char, userChar, updateBoard, findBestMove }) => {
+const GameSquare = ({ id, char, findBestMove, updateBoard, userChar }) => {
   const [printChar, setPrintChar] = useState('')
 
   // nicer 'x's and 'o's
@@ -33,6 +34,14 @@ const GameSquare = ({ id, char, userChar, updateBoard, findBestMove }) => {
       {printChar}
     </div>
   )
+}
+
+GameSquare.propTypes = {
+  id: PropTypes.number,
+  char: PropTypes.string,
+  findBestMove: PropTypes.func,
+  updateBoard: PropTypes.func,
+  userChar: PropTypes.string
 }
 
 export default GameSquare

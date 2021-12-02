@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import './Settings.css'
 
-const Settings = ({ updateUserChar, userChar, done, clearBoard }) => {
+const Settings = ({ clearBoard, done, updateUserChar, userChar }) => {
   // chose whether player is 'x' or 'o' -- game resets on choice.
   const onChangeValue = (event) => {
     updateUserChar(event.target.value)
@@ -27,6 +28,13 @@ const Settings = ({ updateUserChar, userChar, done, clearBoard }) => {
       </div>
     </div>
   )
+}
+
+Settings.propTypes = {
+  clearBoard: PropTypes.func,
+  done: PropTypes.string,
+  updateUserChar: PropTypes.func,
+  userChar: PropTypes.string
 }
 
 export default Settings

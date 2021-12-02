@@ -192,18 +192,18 @@ const GameContainer = () => {
       </div>
       <div className='mainContainer'>
         <GameBoard
+          done={hasWon}
+          findBestMove={findBestMove}
           gameSquares={gameSquares}
           updateBoard={updateBoard}
           userChar={userChar}
-          done={hasWon}
-          findBestMove={findBestMove}
         />
         <div>
           <Settings
+            clearBoard={clearBoard}
+            done={hasWon}
             updateUserChar={setUserChar}
             userChar={userChar}
-            done={hasWon}
-            clearBoard={clearBoard}
           />
           <div className='messageContainer'>
             {message}
