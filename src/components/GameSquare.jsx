@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from 'react'
 import './GameSquare.css'
 
-const GameSquare = ({ id, val, userVal, updateBoard, findBestMove }) => {
-  const [printVal, setPrintVal] = useState('')
+const GameSquare = ({ id, char, userChar, updateBoard, findBestMove }) => {
+  const [printChar, setPrintChar] = useState('')
 
   // nicer 'x's and 'o's
   useEffect(() => {
-    if (val === 'x') {
-      setPrintVal('\u2716')
-    } else if (val === 'o') {
-      setPrintVal('\u2B58')
+    if (char === 'x') {
+      setPrintChar('\u2716')
+    } else if (char === 'o') {
+      setPrintChar('\u2B58')
     } else {
-      setPrintVal(val)
+      setPrintChar(char)
     }
   })
 
   return (
     <div
+      style={{ pointerEvents: char ? 'none' : 'auto' }}
       className='gameSquare'
       onClick={() => {
         updateBoard(id)
-        if (userVal === 'o') {
+        if (userChar === 'o') {
           // next move is 'x'
           findBestMove(true)
-        } else if (userVal === 'x') {
+        } else if (userChar === 'x') {
           // next move is 'o'
           findBestMove(false)
         }
       }}
     >
-      {printVal}
+      {printChar}
     </div>
   )
 }

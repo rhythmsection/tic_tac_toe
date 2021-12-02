@@ -10,8 +10,8 @@ const GameContainer = () => {
   const [gameSquares, setGameSquares] = useState(emptyBoard)
   const [availableSquares, setAvailableSquares] = useState(availableBoard)
   const [hasWon, setHasWon] = useState('')
-  const [userVal, setUserVal] = useState('o')
-  const [compVal, setCompVal] = useState('x')
+  const [userChar, setUserChar] = useState('o')
+  const [compChar, setCompChar] = useState('x')
   const [message, setMessage] = useState('')
 
   const maxDepth = 3
@@ -22,25 +22,25 @@ const GameContainer = () => {
   }, [gameSquares])
 
   useEffect(() => {
-    if (compVal === 'o' && boardCleared) {
+    if (compChar === 'o' && boardCleared) {
       findBestMove(false)
     }
   })
 
   useEffect(() => {
-    if (userVal === 'x') {
-      setCompVal('o')
-    } else if (userVal === 'o') {
-      setCompVal('x')
+    if (userChar === 'x') {
+      setCompChar('o')
+    } else if (userChar === 'o') {
+      setCompChar('x')
     }
-  }, [userVal])
+  }, [userChar])
 
   useEffect(() => {
     if (hasWon === 'tie') {
       setMessage('it\'s a tie!')
     } else if (hasWon) {
       setMessage(`${hasWon} wins!`)
-    } else if (boardCleared && userVal === 'o') {
+    } else if (boardCleared && userChar === 'o') {
       setMessage('you first')
     } else {
       setMessage('')
@@ -93,8 +93,8 @@ const GameContainer = () => {
 
   const updateBoard = (idx, asPlayer = true) => {
     asPlayer
-      ? updateUsedSquares(idx, userVal)
-      : updateUsedSquares(idx, compVal)
+      ? updateUsedSquares(idx, userChar)
+      : updateUsedSquares(idx, compChar)
 
     updateAvailableSquares(idx)
   }
@@ -148,79 +148,44 @@ const GameContainer = () => {
       }
     }
 
-    // maximizing, so, o benefits
-    if (forMax) {
-      // set base to minimum number.
-      let max = -100
-      availableSquares.forEach((idxAsVal) => {
-        // set up a dummy game board to iterate over all scenarios
-        const dupeGameSquares = [...squares]
-        // try a move and subsequent recursion
-        dupeGameSquares.splice(idxAsVal, 1, 'o')
-        const nodeVal = findBestMove(false, depth + 1, dupeGameSquares)
-        max = Math.max(max, nodeVal)
+    // if forMax, o benefits, !forMax, x benefits
+    // set base minimax value.
+    let base = forMax ? -100 : 100
+    const char = forMax ? 'o' : 'x'
 
-        // when we are not recursing, do this.
-        if (depth === 0) {
-          // If we already have the value, add an index as another possible move
-          // at that value.
-          const moves = decisionTree.has(nodeVal)
-            ? [...decisionTree.get(nodeVal), idxAsVal]
-            : [idxAsVal]
-
-          decisionTree.set(nodeVal, moves)
-        }
-      })
+    availableSquares.forEach((idxAsVal) => {
+      // set up a dummy game board to iterate over all scenarios
+      const dupeGameSquares = [...squares]
+      // try a move and subsequent recursion
+      dupeGameSquares.splice(idxAsVal, 1, char)
+      const nodeVal = findBestMove(!forMax, depth + 1, dupeGameSquares)
+      base = forMax
+        ? Math.max(base, nodeVal)
+        : Math.min(base, nodeVal)
 
       // when we are not recursing, do this.
       if (depth === 0) {
-        // remember that collection of indexes we made when value was the same?
-        // now we arbitrarily choose one.
-        const moveArr = decisionTree.get(max)
-        const move = moveArr[Math.floor(Math.random() * moveArr.length)]
-        updateBoard(move, false)
-        return move
+        // If we already have the value, add an index as another possible move
+        // at that value.
+        const moves = decisionTree.has(nodeVal)
+          ? [...decisionTree.get(nodeVal), idxAsVal]
+          : [idxAsVal]
+
+        decisionTree.set(nodeVal, moves)
       }
-      // Else, return the maximized move for the next round of recursion.
-      return max
+    })
+
+    // when we are not recursing, do this.
+    if (depth === 0) {
+      // remember that collection of indexes we made when value was the same?
+      // now we arbitrarily choose one.
+      const moveArr = decisionTree.get(base)
+      const move = moveArr[Math.floor(Math.random() * moveArr.length)]
+      updateBoard(move, false)
+      return move
     }
-
-    // minimizing, so, x benefits
-    if (!forMax) {
-      // set base to maximum number.
-      let min = 100
-      availableSquares.forEach((idxAsVal) => {
-        // set up a dummy game board to iterate over all scenarios
-        const dupeGameSquares = [...squares]
-        // try a move and subsequent recursion
-        dupeGameSquares.splice(idxAsVal, 1, 'x')
-        const nodeVal = findBestMove(true, depth + 1, dupeGameSquares)
-        min = Math.min(min, nodeVal)
-
-        // when we are not recursing, do this.
-        if (depth === 0) {
-          // If we already have the value, add an index as another possible move
-          // at that value.
-          const moves = decisionTree.has(nodeVal)
-            ? [...decisionTree.get(nodeVal), idxAsVal]
-            : [idxAsVal]
-
-          decisionTree.set(nodeVal, moves)
-        }
-      })
-
-      // when we are not recursing, do this.
-      if (depth === 0) {
-        // remember that collection of indexes we made when value was the same?
-        // now we arbitrarily choose one.
-        const moveArr = decisionTree.get(min)
-        const move = moveArr[Math.floor(Math.random() * moveArr.length)]
-        updateBoard(move, false)
-        return move
-      }
-      // Else, return the maximized move for the next round of recursion.
-      return min
-    }
+    // Else, return the maximized move for the next round of recursion.
+    return base
   }
 
   return (
@@ -232,14 +197,14 @@ const GameContainer = () => {
         <GameBoard
           gameSquares={gameSquares}
           updateBoard={updateBoard}
-          userVal={userVal}
+          userChar={userChar}
           done={hasWon}
           findBestMove={findBestMove}
         />
         <div>
           <Settings
-            updateUserVal={setUserVal}
-            userVal={userVal}
+            updateUserChar={setUserChar}
+            userChar={userChar}
             done={hasWon}
             clearBoard={clearBoard}
           />
