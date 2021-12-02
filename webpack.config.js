@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 
 module.exports = {
+  mode: 'none',
   entry: './src/index.jsx',
   output: {
     filename: '[name].[chunkhash].js',
@@ -12,14 +13,10 @@ module.exports = {
   resolve: {
     modules: ['scripts', 'node_modules']
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    }
-  },
   plugins: [
     new CleanWebpackPlugin(),
-    new HtmlWebPackPlugin({ template: 'src/index.html' })
+    new HtmlWebPackPlugin({ template: 'src/index.html' }),
+    new webpack.ProvidePlugin({ process: 'process/browser' })
   ],
   module: {
     rules: [
@@ -55,5 +52,9 @@ module.exports = {
         }
       }
     ]
+  },
+  devServer: {
+    static: './build',
+    port: 4000
   }
-};
+}
