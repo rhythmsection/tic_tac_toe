@@ -99,7 +99,7 @@ const GameContainer = () => {
     updateAvailableSquares(idx)
   }
 
-  // update game squares
+  // update filled squares
   const updateUsedSquares = (idx, val) => {
     gameSquares.splice(idx, 1, val)
     setGameSquares([...gameSquares])
@@ -114,12 +114,13 @@ const GameContainer = () => {
     setAvailableSquares([...availableSquares])
   }
 
+  // board wipe
   const clearBoard = () => {
     setGameSquares(emptyBoard)
     setAvailableSquares(availableBoard)
   }
 
-  // board wipe
+  // board is empty
   const boardCleared = gameSquares.every((sq) => sq === '')
 
   // recursive minimax algorithm
@@ -132,8 +133,8 @@ const GameContainer = () => {
       decisionTree.clear()
     }
 
-    // this is the base case. We have proceeded to a win in scenario.
-    // return value of the board.
+    // We have proceeded to an endpoint in the currently running scenario.
+    // return value of this path.
     if (checkForState(squares) !== '' || depth === maxDepth) {
       // time for some arbitrary decision making
       if (checkForState(squares) === 'o') {

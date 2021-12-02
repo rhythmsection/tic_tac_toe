@@ -5,7 +5,7 @@ const Settings = ({ updateUserVal, userVal, done, clearBoard }) => {
   // chose whether player is 'x' or 'o' -- game resets on choice.
   const onChangeValue = (event) => {
     updateUserVal(event.target.value)
-    // clearBoard()
+    clearBoard()
   }
 
   return (

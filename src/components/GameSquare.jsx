@@ -4,6 +4,7 @@ import './GameSquare.css'
 const GameSquare = ({ id, val, userVal, updateBoard, findBestMove }) => {
   const [printVal, setPrintVal] = useState('')
 
+  // nicer 'x's and 'o's
   useEffect(() => {
     if (val === 'x') {
       setPrintVal('\u2716')
