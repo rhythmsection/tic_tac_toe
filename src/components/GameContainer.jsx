@@ -14,7 +14,7 @@ const GameContainer = () => {
   const [compVal, setCompVal] = useState('x')
   const [message, setMessage] = useState('')
 
-  const maxDepth = 7
+  const maxDepth = 6
   const decisionTree = new Map()
 
   useEffect(() => {
