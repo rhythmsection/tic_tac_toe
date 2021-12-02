@@ -1,36 +1,17 @@
-Simple React, webpack boilerplate
-====================================
+## Simple Tic Tac Toe
 
-It doesn't get much simpler than this. Spin up your front-end environment with ease.
+This is a simple tic tac toe app built with React and Javascript for a coding challenge. It uses the Minimax Algorithm to run the computer AI which is essentially a search of a tree of possible outcomes of a game, finding the most optimal move that lets the computer win in the least number of moves.
 
-Kept up to date by yours truly so you can always use the latest and greatest.
+[Minimax Wikipedia Article](https://en.wikipedia.org/wiki/Minimax)
 
-## Setup
+There are a ton of comments in the actual code to better help you along through the process (especially `findBestMove` if you're looking for the algorithm) of understanding what was done here and why.
 
-* `npm install`
+To load this locally, you can simply `git clone` the repository, and then run `npm install` and then `npm run start` to see the code running on `http://localhost:4000/`.
 
-* `npm start`
+Alternatively, it's also available [HERE](https://tictactoe-6a18f.web.app/), running on the web using firebase.
 
-* `open http://localhost:8080/`
+Thanks for taking a look!
 
-## What's inside
+## About Me
 
-````
-$ tree --charset unicode
-.
-|-- LICENSE
-|-- package.json
-|-- package-lock.json
-|-- README.md
-|-- src
-|   |-- index.html
-|   |-- index.js
-|   `-- input.js
-`-- webpack.config.js
-````
-
-Yep, that's it.
-
-## Contributors
-
-* [Yefim Vedernikoff](https://twitter.com/yefim)
+I'm K. McClure and you can find out more about me [here](http://www.kxmcclure.com).
