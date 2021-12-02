@@ -14,7 +14,7 @@ const GameContainer = () => {
   const [compChar, setCompChar] = useState('x')
   const [message, setMessage] = useState('')
 
-  const maxDepth = 3
+  const maxDepth = 4
   const decisionTree = new Map()
 
   useEffect(() => {
@@ -47,16 +47,6 @@ const GameContainer = () => {
     }
   })
 
-  // check the board for fullness. If full and no winner, tie.
-  const boardFullCheck = () => {
-    for (var square of gameSquares) {
-      if (square === '') {
-        return false
-      }
-    }
-    return true
-  }
-
   // check for board state
   const checkForState = (squares = gameSquares) => {
     const wins = [
@@ -69,6 +59,10 @@ const GameContainer = () => {
       [0, 4, 8], // diagonals
       [2, 4, 6]
     ]
+
+    if (boardCleared) {
+      return ''
+    }
 
     // check for wins by trio
     for (var win of wins) {
@@ -83,7 +77,7 @@ const GameContainer = () => {
     }
 
     // board is full, no more moves, win check failed, must tie
-    if (boardFullCheck()) {
+    if (gameSquares.every((sq) => sq !== '')) {
       return 'tie'
     }
 
@@ -127,7 +121,7 @@ const GameContainer = () => {
   // https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
   // https://www.neverstopbuilding.com/blog/minimax
   // https://en.wikipedia.org/wiki/Minimax
-  const findBestMove = (forMax = true, depth = 0, squares = gameSquares) => {
+  const findBestMove = (forMax = true, depth = 0, gs = gameSquares, as = availableSquares) => {
     // clear if no depth, that means we're starting from square one.
     if (depth === 0) {
       decisionTree.clear()
@@ -135,12 +129,12 @@ const GameContainer = () => {
 
     // We have proceeded to an endpoint in the currently running scenario.
     // return value of this path.
-    if (checkForState(squares) !== '' || depth === maxDepth) {
+    if (checkForState(gs) !== '' || depth === maxDepth) {
       // time for some arbitrary decision making
-      if (checkForState(squares) === 'o') {
+      if (checkForState(gs) === 'o') {
         // if the move benefits o, it is maximized (rated by positivity)
         return 100 - depth
-      } else if (checkForState(squares) === 'x') {
+      } else if (checkForState(gs) === 'x') {
         // if the move benefits x, it is minimized (rated by negativity)
         return -100 + depth
       } else {
@@ -153,15 +147,16 @@ const GameContainer = () => {
     let base = forMax ? -100 : 100
     const char = forMax ? 'o' : 'x'
 
-    availableSquares.forEach((idxAsVal) => {
+    for (var idxAsVal of as) {
       // set up a dummy game board to iterate over all scenarios
-      const dupeGameSquares = [...squares]
+      const squares = [...gs]
+      const openSquares = [...as]
       // try a move and subsequent recursion
-      dupeGameSquares.splice(idxAsVal, 1, char)
-      const nodeVal = findBestMove(!forMax, depth + 1, dupeGameSquares)
-      base = forMax
-        ? Math.max(base, nodeVal)
-        : Math.min(base, nodeVal)
+      squares.splice(idxAsVal, 1, char)
+      openSquares.splice(idxAsVal, 1)
+      const nodeVal = findBestMove(!forMax, depth + 1, squares, openSquares)
+
+      base = forMax ? Math.max(base, nodeVal) : Math.min(base, nodeVal)
 
       // when we are not recursing, do this.
       if (depth === 0) {
@@ -173,14 +168,15 @@ const GameContainer = () => {
 
         decisionTree.set(nodeVal, moves)
       }
-    })
+    }
 
     // when we are not recursing, do this.
     if (depth === 0) {
       // remember that collection of indexes we made when value was the same?
       // now we arbitrarily choose one.
-      const moveArr = decisionTree.get(base)
+      const moveArr = boardCleared ? [0, 2, 4, 6, 8] : decisionTree.get(base)
       const move = moveArr[Math.floor(Math.random() * moveArr.length)]
+
       updateBoard(move, false)
       return move
     }
