@@ -22,7 +22,7 @@ const GameContainer = () => {
   }, [gameSquares])
 
   useEffect(() => {
-    if (compChar === 'o' && boardCleared) {
+    if (compChar === 'o' && boardCleared(gameSquares)) {
       findBestMove(false)
     }
   })
@@ -40,7 +40,7 @@ const GameContainer = () => {
       setMessage('it\'s a tie!')
     } else if (hasWon) {
       setMessage(`${hasWon} wins!`)
-    } else if (boardCleared && userChar === 'o') {
+    } else if (boardCleared(gameSquares) && userChar === 'o') {
       setMessage('you first')
     } else {
       setMessage('')
@@ -60,7 +60,7 @@ const GameContainer = () => {
       [2, 4, 6]
     ]
 
-    if (boardCleared) {
+    if (boardCleared(gameSquares)) {
       return ''
     }
 
@@ -115,7 +115,7 @@ const GameContainer = () => {
   }
 
   // board is empty
-  const boardCleared = gameSquares.every((sq) => sq === '')
+  const boardCleared = (board) => board.every((sq) => sq === '')
 
   // recursive minimax algorithm
   // https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
@@ -174,7 +174,8 @@ const GameContainer = () => {
     if (depth === 0) {
       // remember that collection of indexes we made when value was the same?
       // now we arbitrarily choose one.
-      const moveArr = boardCleared ? [0, 2, 4, 6, 8] : decisionTree.get(base)
+
+      const moveArr = boardCleared(as) ? [0, 2, 4, 6, 8] : decisionTree.get(base)
       const move = moveArr[Math.floor(Math.random() * moveArr.length)]
 
       updateBoard(move, false)
