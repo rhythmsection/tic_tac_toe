@@ -1,3 +1,18 @@
+button {
+  width: 120px;
+  height: 30px;
+  font-family: Outfit;
+  border-color: green;
+  border-width: 1px;
+  border-radius: 20px;
+  background-color: white;
+}
+
+button:hover {
+  background-color: lightgreen;
+  color: white;
+}
+
 input {
   appearance: none;
   margin: 7px 5px 5px 5px;
@@ -18,32 +33,19 @@ input:hover:checked {
   border: 8px solid lightgreen;
 }
 
-button {
-  width: 120px;
-  height: 30px;
-  font-family: Outfit;
-  border-color: green;
-  border-width: 1px;
-  border-radius: 20px;
-  background-color: white;
-}
-
-button:hover {
-  background-color: lightgreen;
-  color: white;
-}
-
-.userSetting {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  margin-bottom: 10px;
-}
-
 .radioButton {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
   margin-right: 5px;
+  font-size: 28px;
+  font-family: 'Noto Sans Symbols 2'
+
+}
+
+.userSetting {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
 }

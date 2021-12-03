@@ -14,11 +14,11 @@ const Settings = ({ clearBoard, done, updateUserChar, userChar }) => {
       <div className='userSetting' onChange={onChangeValue}>
         <div className='radioButton'>
           <input type='radio' value='x' name='userChar' />
-          <span>{'\u2716'}</span>
+          <span style={{ marginTop: '3px' }}>{'\u2716'}</span>
         </div>
         <div className='radioButton'>
           <input type='radio' value='o' name='userChar' defaultChecked={userChar === 'o'} />
-          <span style={{ marginTop: '2px' }}>{'\u2B58'}</span>
+          <span style={{ marginTop: '8px' }}>{'\u2B58'}</span>
         </div>
       </div>
       <div className='clearBoard'>
