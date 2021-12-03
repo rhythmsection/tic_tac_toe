@@ -31,7 +31,9 @@ const GameSquare = ({ id, char, findBestMove, updateBoard, userChar }) => {
         }
       }}
     >
-      {printChar}
+      <span style={{ margin: char === 'o' ? '4px 0 -4px' : null }}>
+        {printChar}
+      </span>
     </div>
   )
 }
